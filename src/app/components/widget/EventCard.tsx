@@ -26,7 +26,7 @@ const EventCard = ({
       </div>
 
       <div>
-        <img src={img} />
+        <img src={img} alt="img" />
       </div>
     </div>
   );

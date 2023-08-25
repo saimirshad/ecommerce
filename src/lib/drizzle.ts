@@ -1,4 +1,4 @@
-import {pgTable, varchar, integer, serial} from "drizzle-orm/pg-core"
+import {pgTable, varchar, integer, serial, real } from "drizzle-orm/pg-core"
 import {drizzle} from "drizzle-orm/vercel-postgres"
 import {sql} from '@vercel/postgres'
 
@@ -10,7 +10,15 @@ export const cartTable = pgTable("cart", {
     product_id: varchar("product_id", {
         length: 255
     }).notNull(),
-    quantity: integer("quantity").notNull()
+    quantity: integer("quantity").notNull(),
+    price: real("price").notNull(),
+    image: varchar("image", {
+        length: 255
+    }).notNull(),
+    title: varchar("title", {
+        length: 255
+    }).notNull(),
+
  })
 
  export const orderTable = pgTable("orders", {
@@ -30,3 +38,7 @@ export const cartTable = pgTable("cart", {
  })
 
  export const db = drizzle(sql)
+
+function float(arg0: string) {
+    throw new Error("Function not implemented.")
+}

@@ -21,7 +21,7 @@ interface ISize {
 }
 
 const ProductDetails = async () => {
-  let [qtyCount, setqtyCount] = useState(1);
+  let [count, setCount] = useState(1);
   const pathname = usePathname();
   const incompleteurl = pathname.slice(pathname.lastIndexOf("/") + 1);
   const url = incompleteurl.replaceAll("-", " ");
@@ -38,15 +38,30 @@ const ProductDetails = async () => {
     name
   }`);
 
-  const handleAddition = () => {
-    setqtyCount(qtyCount++);
-  };
+  function handleSub() {
+    setCount((c) => c - 1);
+    console.log(count);
+  }
 
-  const handleAddToCart = async (id: string) => {
+  function handleAdd() {
+    setCount((c) => c + 1);
+    console.log(count);
+  }
+
+  const handleAddToCart = async (
+    id: string,
+    price: any,
+    image: any,
+    title: string
+  ) => {
     await fetch("/api/cart", {
       method: "POST",
       body: JSON.stringify({
         product_id: id,
+        quantity: count,
+        price: price,
+        image: urlForImage(image).url(),
+        title: title,
       }),
     });
   };
@@ -87,26 +102,19 @@ const ProductDetails = async () => {
               <div className="flex gap-x-8">
                 <span>Quantity</span>
 
-                <button
-                  className={`${
-                    qtyCount >= 1
-                      ? "rounded-full cursor-pointer"
-                      : "rounded-full cursor-not-allowed"
-                  }`}
-                  onClick={() => setqtyCount(qtyCount--)}
-                >
-                  -
-                </button>
-                <span>{qtyCount}</span>
-                <button
-                  className="rounded-full cursor-pointer"
-                  onClick={() => setqtyCount(qtyCount++)}
-                >
-                  +
-                </button>
+                <button onClick={handleSub}>-</button>
+                <span>{count}</span>
+                <button onClick={handleAdd}>+</button>
                 <Link href={"/Cart"}>
                   <button
-                    onClick={() => handleAddToCart(item._id)}
+                    onClick={() =>
+                      handleAddToCart(
+                        item._id,
+                        item.price,
+                        item.image,
+                        item.title
+                      )
+                    }
                     className="px-6 py-2 text-white bg-gray-400 border"
                   >
                     Add to Cart

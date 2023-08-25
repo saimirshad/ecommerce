@@ -1,5 +1,4 @@
 "use client";
-import react from "react";
 import Logo from "@/app/assets/Logo.webp";
 import React, { useState, useCallback } from "react";
 import Image from "next/image";

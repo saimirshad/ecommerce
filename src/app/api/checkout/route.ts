@@ -18,6 +18,7 @@ export const POST = async(request: NextRequest) => {
 
    if(payment_method == 'creditCard'){
     //process credit card payments here 
+    console.log('hi stripe')
    }else {
     // process other types of payments
     

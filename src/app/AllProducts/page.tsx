@@ -29,7 +29,7 @@ const AllProducts = async () => {
           {data.map((item) => (
             <Link
               key={item.id}
-              href={`/Product2/${item.title.replaceAll(" ", "-")}`}
+              href={`/product/${item.title.replaceAll(" ", "-")}`}
             >
               <div className="max-h-[300px] mb-44">
                 <Image

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { client } from "@/lib/sanityClient";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import Wrapper from "@/app/components/shared/Wrapper";
 import Link from "next/link";
 
 interface IProduct {
+  _id: string;
   title: string;
   description: string;
   image: IImage;
@@ -19,34 +20,78 @@ interface ISize {
   name: string;
 }
 
-const ProductDetails = async () => {
-  let [qtyCount, setqtyCount] = useState(1);
+const ProductDetails = () => {
+  const [count, setCount] = useState(1);
   const pathname = usePathname();
   const incompleteurl = pathname.slice(pathname.lastIndexOf("/") + 1);
   const url = incompleteurl.replaceAll("-", " ");
 
-  const data: IProduct[] = await client.fetch(`*[title=='${url}']{
-    title,
-    description,
-    image,
-    price,
-  }`);
+  const [data, setData] = useState<IProduct[]>([]);
+  const [size, setSize] = useState<ISize[]>([]);
 
-  const size: ISize[] = await client.fetch(`*[_type=="size"]{
-    name
-  }`);
+  const dataFetch = async () => {
+    const data: IProduct[] = await client.fetch(`*[title=='${url}']{
+      _id,
+      title,
+      description,
+      image,
+      price,
+    }`);
+    return data;
+  };
+  const sizefetch = async () => {
+    const size: ISize[] = await client.fetch(`*[_type=="size"]{
+      name
+    }`);
+    return size;
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const productData: IProduct[] = await dataFetch();
+      const sizeData: ISize[] = await sizefetch();
+      setData(productData);
+      setSize(sizeData);
+    };
+    fetchData();
+  }, []);
 
-  const handleAddition = () => {
-    setqtyCount(qtyCount++);
+  function handleSub() {
+    if (count > 1) {
+      setCount(count - 1);
+      console.log(count);
+    }
+  }
+
+  function handleAddition() {
+    setCount(count + 1);
+    console.log(count);
+  }
+
+  const handleAddToCart = async (
+    id: string,
+    price: any,
+    image: any,
+    title: string
+  ) => {
+    await fetch("https://e-commerce-rouge-iota.vercel.app/api/cart", {
+      method: "POST",
+      body: JSON.stringify({
+        product_id: id,
+        quantity: count,
+        price: price,
+        image: urlForImage(image).url(),
+        title: title,
+      }),
+    });
   };
 
   return (
     <div>
       <Wrapper>
-        {data.map((item, index) => (
+        {data.map((item) => (
           <section
             className="flex items-center justify-around object-none w-4/5 gap-16 ml-48"
-            key={index}
+            key={item._id}
           >
             <div className="w-3/5">
               <Image
@@ -73,32 +118,25 @@ const ProductDetails = async () => {
                   </button>
                 ))}
               </div>
-              <div className="flex gap-x-8">
-                <span>Quantity</span>
-
+              <span>Quantity</span>
+              <button onClick={handleSub}>-</button>
+              <span>{count}</span>
+              <button onClick={handleAddition}>+</button>
+              <Link href={"/Cart"}>
                 <button
-                  className={`${
-                    qtyCount >= 1
-                      ? "rounded-full cursor-pointer"
-                      : "rounded-full cursor-not-allowed"
-                  }`}
-                  onClick={() => setqtyCount(qtyCount--)}
+                  onClick={() =>
+                    handleAddToCart(
+                      item._id,
+                      item.price,
+                      item.image,
+                      item.title
+                    )
+                  }
+                  className="px-6 py-2 text-white bg-gray-400 border"
                 >
-                  -
+                  Add to Cart
                 </button>
-                <span>{qtyCount}</span>
-                <button
-                  className="rounded-full cursor-pointer"
-                  onClick={() => setqtyCount(qtyCount++)}
-                >
-                  +
-                </button>
-                <Link href={"/Cart"}>
-                  <button className="px-6 py-2 text-white bg-gray-400 border">
-                    Add to Cart
-                  </button>
-                </Link>
-              </div>
+              </Link>
             </div>
           </section>
         ))}

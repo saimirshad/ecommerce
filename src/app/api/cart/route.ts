@@ -15,9 +15,29 @@ export const GET = async (request: NextRequest) => {
     }
     try {
       const res = await db.select().from(cartTable).where(eq(cartTable.user_id, uid))
+      const cartItems = res.map((item) => ({
+        _id: item.product_id,
+        title: item.title,
+        price: item.price,
+        totalPrice: item.price * item.quantity,
+        image: item.image,
+        userId: item.user_id,
+        quantity: item.quantity,
+      }));
+      const totalQuantity = cartItems.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+      const totalAmount = cartItems.reduce(
+        (total, item) => total + item.totalPrice,
+        0
+      );
 
+    
+     
+    return NextResponse.json({res, cartItems, totalQuantity, totalAmount });
       
-      return NextResponse.json({ res });
+      return NextResponse.json({ res  });
     } catch (error) {
       console.error("Error fetching cart data:", error);
       return NextResponse.json({ error: "Error fetching cart data" });
@@ -36,12 +56,15 @@ export const GET = async (request: NextRequest) => {
     try {
         const res = await db.insert(cartTable).values({
             product_id: req.product_id,
-            quantity: 1,
+            quantity: req.quantity,
+            price: req.price,
+            image: req.image,
+            title: req.title,
             user_id: cookies().get("user_id")?.value as string 
         }).returning()
 
     
-        
+        console.log(res)
         return NextResponse.json({ res })
     }catch (error) {
         console.log(error)

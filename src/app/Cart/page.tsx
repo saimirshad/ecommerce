@@ -5,7 +5,6 @@ import Footer from "../components/layout/Footer";
 const CartData = () => {
   return (
     <div>
-      {/* @ts-expect-error Server Component */}
       <Cart />
     </div>
   );

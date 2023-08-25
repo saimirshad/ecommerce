@@ -27,8 +27,6 @@ const CheckoutForm: React.FC = () => {
           payment_method: paymentMethod,
         }),
       });
-
-      console.log({ name, email, address, paymentMethod });
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -51,7 +49,7 @@ const CheckoutForm: React.FC = () => {
   return (
     <div className="max-w-md mx-auto">
       <h2 className="mb-4 text-2xl font-bold">Checkout Form</h2>
-      <form action="/api/checkout_sessions" method="POST">
+      <form method="POST" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block mb-1">
             Name:
