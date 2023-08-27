@@ -52,7 +52,9 @@ export const GET = async (request: NextRequest) => {
     if(!user_id){
         setCookies.set("user_id", uid)
     }
-   
+    
+    
+
     try {
         const res = await db.insert(cartTable).values({
             product_id: req.product_id,

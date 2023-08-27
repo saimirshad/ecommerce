@@ -127,29 +127,29 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-[#fbfcff] flex-1 flex flex-col gap-8 p-8">
-              <h4 className="text-xl font-bold">Order Summary</h4>
-              <div className="flex justify-between">
-                <h4>Quantity</h4>
-                <h4>{data.totalQuantity}</h4>
-              </div>
-              <div className="flex justify-between">
-                <h4>Sub Total</h4>
-                <h4>{data.totalAmount}</h4>
-              </div>
-              {/* <Link href={"/Checkout"}> */}
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={handleStripeCheckout}
-                  className="py-3 text-sm font-semibold text-white bg-black disabled:opacity-20 disabled:cursor-not-allowed"
-                >
-                  Process to Checkout
-                </button>
-              </div>
-              {/* </Link> */}
-            </div>
+            {/* </Link> */}
           </div>
         ))}
+        <div className="bg-[#fbfcff] flex-1 flex flex-col gap-8 p-8">
+          <h4 className="text-xl font-bold">Order Summary</h4>
+          <div className="flex justify-between">
+            <h4>Quantity</h4>
+            <h4>{data.totalQuantity}</h4>
+          </div>
+          <div className="flex justify-between">
+            <h4>Sub Total</h4>
+            <h4>{data.totalAmount}</h4>
+          </div>
+          {/* <Link href={"/Checkout"}> */}
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={handleStripeCheckout}
+              className="py-3 text-sm font-semibold text-white bg-black disabled:opacity-20 disabled:cursor-not-allowed"
+            >
+              Process to Checkout
+            </button>
+          </div>
+        </div>
       </section>
     </>
   );
