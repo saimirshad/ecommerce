@@ -35,7 +35,7 @@ const Cart = () => {
 
   const dataFetch = async () => {
     const res = await fetch(
-      `https://e-commerce-rouge-iota.vercel.app/api/cart?user_id=${user_id}`
+      `https://e-commerce-two-zeta.vercel.app/api/cart?user_id=${user_id}`
     );
     const data = await res.json();
 
@@ -53,7 +53,7 @@ const Cart = () => {
     console.log("hello");
     const stripe = await getStripePromise();
     const res = await fetch(
-      "https://e-commerce-rouge-iota.vercel.app/api/checkout_sessions",
+      "https://e-commerce-two-zeta.vercel.app/api/checkout_sessions",
       {
         method: "POST",
         headers: {

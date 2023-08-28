@@ -73,7 +73,7 @@ const ProductDetails = () => {
     image: any,
     title: string
   ) => {
-    await fetch("https://e-commerce-rouge-iota.vercel.app/api/cart", {
+    await fetch("https://e-commerce-two-zeta.vercel.app/api/cart", {
       method: "POST",
       body: JSON.stringify({
         product_id: id,
